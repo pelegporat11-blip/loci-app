@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Loci — Your saves, where they matter.</title>
+  <meta name="description" content="Loci is a location-aware read-it-later app. Save links, pin them to zones, and they surface when you arrive." />
+  <meta property="og:title" content="Loci — Your saves, where they matter." />
+  <meta property="og:description" content="Save links, pin them to zones, and they surface when you arrive." />
+  <meta property="og:type" content="website" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #0e0e0f;
+      --surface: #161618;
+      --surface2: #1e1e22;
+      --accent: #c8f07a;
+      --accent-dim: rgba(200, 240, 122, 0.12);
+      --accent-border: rgba(200, 240, 122, 0.3);
+      --text: #f0ede8;
+      --muted: #a09d98;
+      --subtle: #5a5855;
+      --border: #2e2e34;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 32px;
+      background: rgba(14, 14, 15, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+
+    .nav-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .nav-name {
+      font-size: 18px;
+      font-weight: 300;
+      color: var(--text);
+      letter-spacing: 1px;
+    }
+
+    .nav-cta {
+      background: var(--accent-dim);
+      border: 1px solid var(--accent-border);
+      color: var(--accent);
+      padding: 8px 18px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      letter-spacing: 0.3px;
+      transition: background 0.2s;
+    }
+
+    .nav-cta:hover { background: rgba(200, 240, 122, 0.2); }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 120px 24px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 20%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(200, 240, 122, 0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--accent-dim);
+      border: 1px solid var(--accent-border);
+      color: var(--accent);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+      margin-bottom: 28px;
+      letter-spacing: 0.5px;
+    }
+
+    .hero-badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    .hero h1 {
+      font-size: clamp(40px, 8vw, 80px);
+      font-weight: 300;
+      letter-spacing: -1px;
+      line-height: 1.1;
+      margin-bottom: 20px;
+      color: var(--text);
+    }
+
+    .hero h1 span { color: var(--accent); }
+
+    .hero p {
+      font-size: clamp(16px, 2.5vw, 20px);
+      color: var(--muted);
+      max-width: 480px;
+      margin-bottom: 40px;
+      line-height: 1.7;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn-primary {
+      background: var(--accent-dim);
+      border: 1px solid var(--accent-border);
+      color: var(--accent);
+      padding: 14px 28px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+
+    .btn-primary:hover { background: rgba(200, 240, 122, 0.2); }
+
+    .btn-secondary {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 14px 28px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .btn-secondary:hover { border-color: var(--accent-border); color: var(--text); }
+
+    /* HOW IT WORKS */
+    .section {
+      padding: 100px 24px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 12px;
+      color: var(--accent);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+
+    .section h2 {
+      font-size: clamp(28px, 5vw, 44px);
+      font-weight: 300;
+      text-align: center;
+      margin-bottom: 16px;
+      letter-spacing: -0.5px;
+    }
+
+    .section-sub {
+      text-align: center;
+      color: var(--muted);
+      font-size: 16px;
+      max-width: 480px;
+      margin: 0 auto 60px;
+      line-height: 1.7;
+    }
+
+    /* STEPS */
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .step {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      transition: border-color 0.2s;
+    }
+
+    .step:hover { border-color: var(--accent-border); }
+
+    .step-num {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: var(--accent-dim);
+      border: 1px solid var(--accent-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+
+    .step h3 {
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .step p { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+    /* FEATURES */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+    }
+
+    .feature {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px;
+      transition: border-color 0.2s;
+    }
+
+    .feature:hover { border-color: var(--accent-border); }
+
+    .feature-icon { font-size: 28px; margin-bottom: 12px; }
+
+    .feature h3 {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .feature p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+    /* PRICING */
+    .pricing {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .plan {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      position: relative;
+      transition: border-color 0.2s;
+    }
+
+    .plan:hover { border-color: var(--accent-border); }
+
+    .plan.featured {
+      border-color: var(--accent-border);
+      background: rgba(200, 240, 122, 0.04);
+    }
+
+    .plan-badge {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--accent);
+      color: var(--bg);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+
+    .plan-name {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 500;
+    }
+
+    .plan-price {
+      font-size: 36px;
+      font-weight: 300;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .plan-price span { font-size: 16px; color: var(--muted); }
+
+    .plan-period {
+      font-size: 13px;
+      color: var(--subtle);
+      margin-bottom: 24px;
+    }
+
+    .plan-features { list-style: none; }
+
+    .plan-features li {
+      font-size: 13px;
+      color: var(--muted);
+      padding: 6px 0;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .plan-features li:last-child { border-bottom: none; }
+    .plan-features li::before { content: '✦'; color: var(--accent); font-size: 10px; flex-shrink: 0; }
+
+    /* CTA SECTION */
+    .cta-section {
+      text-align: center;
+      padding: 100px 24px;
+      background: linear-gradient(180deg, transparent, rgba(200, 240, 122, 0.03) 50%, transparent);
+    }
+
+    .cta-section h2 {
+      font-size: clamp(28px, 5vw, 44px);
+      font-weight: 300;
+      margin-bottom: 16px;
+      letter-spacing: -0.5px;
+    }
+
+    .cta-section p {
+      color: var(--muted);
+      font-size: 16px;
+      margin-bottom: 36px;
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: gap;
+      gap: 16px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+
+    .footer-logo-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .footer-logo-name {
+      font-size: 16px;
+      font-weight: 300;
+      color: var(--text);
+      letter-spacing: 1px;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      font-size: 13px;
+      color: var(--subtle);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--muted); }
+
+    .footer-copy {
+      font-size: 12px;
+      color: var(--subtle);
+    }
+
+    /* DIVIDER */
+    .divider {
+      height: 1px;
+      background: var(--border);
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    @media (max-width: 600px) {
+      nav { padding: 14px 20px; }
+      .hero { padding: 100px 20px 60px; }
+      footer { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">
+      <div class="nav-dot"></div>
+      <span class="nav-name">Loci</span>
+    </a>
+    <a href="#download" class="nav-cta">Download</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-badge">
+      <div class="hero-badge-dot"></div>
+      Coming to the App Store
+    </div>
+    <h1>Your saves,<br><span>where they matter.</span></h1>
+    <p>Stop losing the things you find online. Loci surfaces your saved content the moment you arrive at the place you need it.</p>
+    <div class="hero-buttons">
+      <a href="#download" class="btn-primary">🍎 App Store — Coming Soon</a>
+      <a href="#how" class="btn-secondary">How it works</a>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- HOW IT WORKS -->
+  <section class="section" id="how">
+    <p class="section-label">How it works</p>
+    <h2>Three steps to smarter saves</h2>
+    <p class="section-sub">Loci connects your saved content to the real world, so the right thing appears at the right time.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>Save a link</h3>
+        <p>Save any link, video, recipe, or article. Loci auto-fetches the title so you don't have to type anything.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>Pin it to a Zone</h3>
+        <p>Tag your save to a Zone — Kitchen, Gym, Coffee Shop, Airport. Anywhere that has meaning to you.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>Arrive and discover</h3>
+        <p>When you enter a Zone, Loci surfaces everything you saved there. No searching, no forgetting.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- FEATURES -->
+  <section class="section" id="features">
+    <p class="section-label">Features</p>
+    <h2>Everything you need</h2>
+    <p class="section-sub">Built for people who save things with intention.</p>
+    <div class="features">
+      <div class="feature">
+        <div class="feature-icon">📍</div>
+        <h3>Geo-surfacing</h3>
+        <p>Saves automatically appear when you enter the zone they're pinned to.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🗂️</div>
+        <h3>Custom Zones</h3>
+        <p>Create zones for any place — home, work, travel destinations, anywhere.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🎬</div>
+        <h3>Video thumbnails</h3>
+        <p>YouTube and Vimeo saves show rich thumbnails so you always know what's waiting.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🌍</div>
+        <h3>9 languages</h3>
+        <p>Available in English, Hebrew, Spanish, French, German, Portuguese, Japanese, Arabic, and Chinese.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🔗</div>
+        <h3>Smart link preview</h3>
+        <p>Paste a URL and the title fills in automatically. Save in seconds.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🍳</div>
+        <h3>Recipe extraction</h3>
+        <p>Turn cooking videos into structured recipes with ingredients and steps. Pro feature.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- PRICING -->
+  <section class="section" id="pricing">
+    <p class="section-label">Pricing</p>
+    <h2>Simple, honest pricing</h2>
+    <p class="section-sub">Start for free. Upgrade when Loci becomes indispensable.</p>
+    <div class="pricing">
+      <div class="plan">
+        <p class="plan-name">Free</p>
+        <p class="plan-price">$0</p>
+        <p class="plan-period">forever</p>
+        <ul class="plan-features">
+          <li>Save unlimited links</li>
+          <li>Create custom zones</li>
+          <li>Video thumbnails</li>
+          <li>Smart link preview</li>
+          <li>9 languages</li>
+        </ul>
+      </div>
+      <div class="plan featured">
+        <div class="plan-badge">Most popular</div>
+        <p class="plan-name">Pro Yearly</p>
+        <p class="plan-price">$29.99<span>/yr</span></p>
+        <p class="plan-period">just $2.50 per month</p>
+        <ul class="plan-features">
+          <li>Everything in Free</li>
+          <li>Geo-surfacing notifications</li>
+          <li>Unlimited zones</li>
+          <li>Recipe extraction</li>
+          <li>Priority sync & offline</li>
+          <li>Save history & insights</li>
+        </ul>
+      </div>
+      <div class="plan">
+        <p class="plan-name">Lifetime</p>
+        <p class="plan-price">$49.99</p>
+        <p class="plan-period">one time payment</p>
+        <ul class="plan-features">
+          <li>Everything in Pro</li>
+          <li>All future features</li>
+          <li>🔥 Founding member status</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- CTA -->
+  <section class="cta-section" id="download">
+    <h2>Ready to save smarter?</h2>
+    <p>Loci is coming to the App Store soon. Be the first to know.</p>
+    <a href="mailto:support@loci.app" class="btn-primary">✉️ Get notified at launch</a>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- FOOTER -->
+  <footer>
+    <a href="#" class="footer-logo">
+      <div class="footer-logo-dot"></div>
+      <span class="footer-logo-name">Loci</span>
+    </a>
+    <div class="footer-links">
+      <a href="#how">How it works</a>
+      <a href="#features">Features</a>
+      <a href="#pricing">Pricing</a>
+      <a href="mailto:support@loci.app">Contact</a>
+    </div>
+    <p class="footer-copy">© 2026 Loci. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>
