@@ -3,94 +3,86 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Loci — Your saves, where they matter.</title>
-  <meta name="description" content="Loci is a location-aware read-it-later app. Save links, pin them to zones, and they surface when you arrive." />
-  <meta property="og:title" content="Loci — Your saves, where they matter." />
-  <meta property="og:description" content="Save links, pin them to zones, and they surface when you arrive." />
-  <meta property="og:type" content="website" />
+  <title>Loci — Save links to places</title>
+  <meta name="description" content="Loci surfaces your saved links when you arrive at the right place. Save anything. Let location do the rest." />
+  <link rel="icon" href="icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #0e0e0f;
-      --surface: #161618;
-      --surface2: #1e1e22;
-      --accent: #c8f07a;
-      --accent-dim: rgba(200, 240, 122, 0.12);
-      --accent-border: rgba(200, 240, 122, 0.3);
+      --green: #c8f07a;
+      --green-dim: rgba(200, 240, 122, 0.15);
+      --green-border: rgba(200, 240, 122, 0.25);
+      --bg: #0a0a0b;
+      --surface: #111113;
+      --surface2: #18181b;
+      --border: rgba(255,255,255,0.07);
       --text: #f0ede8;
       --muted: #a09d98;
       --subtle: #5a5855;
-      --border: #2e2e34;
+      --radius: 16px;
     }
 
     html { scroll-behavior: smooth; }
 
     body {
+      font-family: 'Inter', system-ui, sans-serif;
       background: var(--bg);
       color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       line-height: 1.6;
-      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
     }
 
-    /* NAV */
+    /* ── NAV ── */
     nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 16px 32px;
-      background: rgba(14, 14, 15, 0.85);
-      backdrop-filter: blur(12px);
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 40px;
+      background: rgba(10,10,11,0.8);
+      backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--border);
     }
 
     .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      display: flex; align-items: center; gap: 10px;
       text-decoration: none;
     }
+    .nav-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--green); }
+    .nav-name { font-size: 18px; font-weight: 500; color: var(--text); letter-spacing: 1.5px; }
 
-    .nav-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--accent);
+    .nav-links { display: flex; align-items: center; gap: 32px; }
+    .nav-links a {
+      font-size: 14px; color: var(--muted); text-decoration: none;
+      transition: color 0.2s;
     }
+    .nav-links a:hover { color: var(--text); }
 
-    .nav-name {
-      font-size: 18px;
-      font-weight: 300;
-      color: var(--text);
-      letter-spacing: 1px;
-    }
-
-    .nav-cta {
-      background: var(--accent-dim);
-      border: 1px solid var(--accent-border);
-      color: var(--accent);
-      padding: 8px 18px;
-      border-radius: 20px;
-      font-size: 13px;
-      font-weight: 600;
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--green-dim);
+      border: 1px solid var(--green-border);
+      color: var(--green);
+      padding: 10px 20px;
+      border-radius: 100px;
+      font-size: 14px; font-weight: 500;
       text-decoration: none;
-      letter-spacing: 0.3px;
-      transition: background 0.2s;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .btn-primary:hover {
+      background: rgba(200, 240, 122, 0.22);
+      border-color: rgba(200, 240, 122, 0.4);
+      transform: translateY(-1px);
     }
 
-    .nav-cta:hover { background: rgba(200, 240, 122, 0.2); }
-
-    /* HERO */
+    /* ── HERO ── */
     .hero {
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
       text-align: center;
       padding: 120px 24px 80px;
       position: relative;
@@ -99,38 +91,22 @@
 
     .hero::before {
       content: '';
-      position: absolute;
-      top: 20%;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 600px;
-      height: 600px;
-      background: radial-gradient(circle, rgba(200, 240, 122, 0.06) 0%, transparent 70%);
+      position: absolute; top: -200px; left: 50%; transform: translateX(-50%);
+      width: 800px; height: 800px;
+      background: radial-gradient(ellipse, rgba(200,240,122,0.08) 0%, transparent 70%);
       pointer-events: none;
     }
 
     .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: var(--accent-dim);
-      border: 1px solid var(--accent-border);
-      color: var(--accent);
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 500;
-      margin-bottom: 28px;
-      letter-spacing: 0.5px;
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--green-dim);
+      border: 1px solid var(--green-border);
+      color: var(--green);
+      padding: 6px 14px; border-radius: 100px;
+      font-size: 12px; font-weight: 500; letter-spacing: 0.5px;
+      margin-bottom: 32px;
     }
-
-    .hero-badge-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--accent);
-      animation: pulse 2s infinite;
-    }
+    .hero-badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
 
     @keyframes pulse {
       0%, 100% { opacity: 1; }
@@ -138,326 +114,287 @@
     }
 
     .hero h1 {
-      font-size: clamp(40px, 8vw, 80px);
+      font-size: clamp(42px, 7vw, 80px);
       font-weight: 300;
       letter-spacing: -1px;
       line-height: 1.1;
-      margin-bottom: 20px;
-      color: var(--text);
+      margin-bottom: 24px;
+      max-width: 800px;
+    }
+    .hero h1 em {
+      font-style: normal;
+      background: linear-gradient(135deg, var(--green) 0%, #a8e05a 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
-    .hero h1 span { color: var(--accent); }
+    .hero-sub {
+      font-size: 18px; color: var(--muted); max-width: 500px;
+      margin: 0 auto 48px; line-height: 1.7; font-weight: 300;
+    }
 
-    .hero p {
-      font-size: clamp(16px, 2.5vw, 20px);
+    .hero-actions {
+      display: flex; align-items: center; gap: 16px; flex-wrap: wrap; justify-content: center;
+      margin-bottom: 80px;
+    }
+
+    .btn-appstore {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--text); color: var(--bg);
+      padding: 14px 28px; border-radius: 100px;
+      font-size: 15px; font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .btn-appstore:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(240,237,232,0.15); }
+    .btn-appstore svg { width: 20px; height: 20px; }
+
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: 8px;
       color: var(--muted);
-      max-width: 480px;
-      margin-bottom: 40px;
-      line-height: 1.7;
+      padding: 14px 28px; border-radius: 100px;
+      border: 1px solid var(--border);
+      font-size: 15px; font-weight: 400;
+      text-decoration: none;
+      transition: all 0.2s;
+      background: var(--surface);
     }
+    .btn-secondary:hover { color: var(--text); border-color: rgba(255,255,255,0.15); }
 
-    .hero-buttons {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
+    /* Phone mockup */
+    .hero-mockup {
+      position: relative; display: flex; gap: 16px; align-items: flex-end;
       justify-content: center;
     }
 
-    .btn-primary {
-      background: var(--accent-dim);
-      border: 1px solid var(--accent-border);
-      color: var(--accent);
-      padding: 14px 28px;
-      border-radius: 12px;
-      font-size: 15px;
-      font-weight: 600;
-      text-decoration: none;
-      transition: background 0.2s;
-    }
-
-    .btn-primary:hover { background: rgba(200, 240, 122, 0.2); }
-
-    .btn-secondary {
-      background: var(--surface);
+    .phone {
+      width: 220px;
+      background: var(--surface2);
       border: 1px solid var(--border);
-      color: var(--muted);
-      padding: 14px 28px;
-      border-radius: 12px;
-      font-size: 15px;
-      font-weight: 500;
-      text-decoration: none;
-      transition: border-color 0.2s, color 0.2s;
+      border-radius: 36px;
+      overflow: hidden;
+      box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+    }
+    .phone img { width: 100%; display: block; }
+    .phone.secondary {
+      width: 190px;
+      margin-bottom: 40px;
+      opacity: 0.7;
+      filter: blur(0.5px);
     }
 
-    .btn-secondary:hover { border-color: var(--accent-border); color: var(--text); }
-
-    /* HOW IT WORKS */
+    /* ── FEATURES ── */
     .section {
       padding: 100px 24px;
-      max-width: 1000px;
-      margin: 0 auto;
+      max-width: 1100px; margin: 0 auto;
     }
 
     .section-label {
-      font-size: 12px;
-      color: var(--accent);
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      font-weight: 600;
-      margin-bottom: 12px;
-      text-align: center;
+      font-size: 12px; font-weight: 500; letter-spacing: 1.5px;
+      color: var(--green); text-transform: uppercase; margin-bottom: 16px;
     }
-
-    .section h2 {
-      font-size: clamp(28px, 5vw, 44px);
-      font-weight: 300;
-      text-align: center;
-      margin-bottom: 16px;
-      letter-spacing: -0.5px;
+    .section-title {
+      font-size: clamp(28px, 4vw, 44px);
+      font-weight: 300; letter-spacing: -0.5px; line-height: 1.2;
+      margin-bottom: 16px; max-width: 600px;
     }
-
     .section-sub {
-      text-align: center;
-      color: var(--muted);
-      font-size: 16px;
-      max-width: 480px;
-      margin: 0 auto 60px;
-      line-height: 1.7;
+      font-size: 16px; color: var(--muted); max-width: 500px;
+      line-height: 1.7; margin-bottom: 60px; font-weight: 300;
     }
 
-    /* STEPS */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 16px;
+    }
+
+    .feature-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .feature-card:hover {
+      border-color: rgba(255,255,255,0.12);
+      transform: translateY(-2px);
+    }
+
+    .feature-icon {
+      width: 44px; height: 44px;
+      background: var(--green-dim);
+      border: 1px solid var(--green-border);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; margin-bottom: 18px;
+    }
+    .feature-card h3 { font-size: 16px; font-weight: 500; margin-bottom: 8px; }
+    .feature-card p { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+    /* ── HOW IT WORKS ── */
+    .how-section {
+      padding: 100px 24px;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .how-inner { max-width: 1100px; margin: 0 auto; }
+
     .steps {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 0;
+      margin-top: 60px;
     }
 
     .step {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 28px;
-      transition: border-color 0.2s;
+      padding: 32px;
+      position: relative;
     }
-
-    .step:hover { border-color: var(--accent-border); }
+    .step:not(:last-child)::after {
+      content: '';
+      position: absolute; top: 48px; right: 0;
+      width: 1px; height: 60px;
+      background: var(--border);
+    }
 
     .step-num {
-      width: 36px;
-      height: 36px;
-      border-radius: 10px;
-      background: var(--accent-dim);
-      border: 1px solid var(--accent-border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--accent);
-      margin-bottom: 16px;
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--green-dim);
+      border: 1px solid var(--green-border);
+      color: var(--green); font-size: 13px; font-weight: 600;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 20px;
     }
-
-    .step h3 {
-      font-size: 17px;
-      font-weight: 600;
-      color: var(--text);
-      margin-bottom: 8px;
-    }
-
+    .step h3 { font-size: 17px; font-weight: 500; margin-bottom: 10px; }
     .step p { font-size: 14px; color: var(--muted); line-height: 1.6; }
 
-    /* FEATURES */
-    .features {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 16px;
+    /* ── SCREENSHOTS ── */
+    .screenshots-section {
+      padding: 100px 0;
+      overflow: hidden;
     }
+    .screenshots-header {
+      text-align: center; padding: 0 24px; margin-bottom: 60px;
+    }
+    .screenshots-scroll {
+      display: flex; gap: 20px;
+      overflow-x: auto; padding: 20px 60px 40px;
+      scrollbar-width: none;
+    }
+    .screenshots-scroll::-webkit-scrollbar { display: none; }
 
-    .feature {
-      background: var(--surface);
+    .screenshot-card {
+      flex-shrink: 0; width: 240px;
+      background: var(--surface2);
       border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 24px;
-      transition: border-color 0.2s;
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+      transition: transform 0.3s;
+    }
+    .screenshot-card:hover { transform: scale(1.03) translateY(-4px); }
+    .screenshot-card img { width: 100%; display: block; }
+    .screenshot-label {
+      padding: 14px 16px;
+      font-size: 13px; color: var(--muted); text-align: center;
     }
 
-    .feature:hover { border-color: var(--accent-border); }
-
-    .feature-icon { font-size: 28px; margin-bottom: 12px; }
-
-    .feature h3 {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--text);
-      margin-bottom: 6px;
-    }
-
-    .feature p { font-size: 13px; color: var(--muted); line-height: 1.6; }
-
-    /* PRICING */
-    .pricing {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 16px;
-      max-width: 900px;
-      margin: 0 auto;
-    }
-
-    .plan {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 28px;
-      position: relative;
-      transition: border-color 0.2s;
-    }
-
-    .plan:hover { border-color: var(--accent-border); }
-
-    .plan.featured {
-      border-color: var(--accent-border);
-      background: rgba(200, 240, 122, 0.04);
-    }
-
-    .plan-badge {
-      position: absolute;
-      top: -12px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: var(--accent);
-      color: var(--bg);
-      font-size: 11px;
-      font-weight: 700;
-      padding: 4px 12px;
-      border-radius: 20px;
-      white-space: nowrap;
-    }
-
-    .plan-name {
-      font-size: 14px;
-      color: var(--muted);
-      margin-bottom: 8px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      font-weight: 500;
-    }
-
-    .plan-price {
-      font-size: 36px;
-      font-weight: 300;
-      color: var(--text);
-      margin-bottom: 4px;
-    }
-
-    .plan-price span { font-size: 16px; color: var(--muted); }
-
-    .plan-period {
-      font-size: 13px;
-      color: var(--subtle);
-      margin-bottom: 24px;
-    }
-
-    .plan-features { list-style: none; }
-
-    .plan-features li {
-      font-size: 13px;
-      color: var(--muted);
-      padding: 6px 0;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .plan-features li:last-child { border-bottom: none; }
-    .plan-features li::before { content: '✦'; color: var(--accent); font-size: 10px; flex-shrink: 0; }
-
-    /* CTA SECTION */
-    .cta-section {
-      text-align: center;
+    /* ── PRICING TEASER ── */
+    .pricing-section {
       padding: 100px 24px;
-      background: linear-gradient(180deg, transparent, rgba(200, 240, 122, 0.03) 50%, transparent);
+      max-width: 900px; margin: 0 auto;
     }
 
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin-top: 60px;
+    }
+
+    .plan-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+    }
+    .plan-card.featured {
+      background: var(--green-dim);
+      border-color: var(--green-border);
+    }
+
+    .plan-name { font-size: 13px; font-weight: 500; color: var(--muted); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; }
+    .plan-price { font-size: 36px; font-weight: 300; margin-bottom: 4px; }
+    .plan-price span { font-size: 14px; color: var(--muted); font-weight: 400; }
+    .plan-desc { font-size: 13px; color: var(--muted); margin-bottom: 24px; line-height: 1.5; }
+    .plan-features { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .plan-features li { font-size: 14px; color: var(--muted); display: flex; gap: 10px; align-items: flex-start; }
+    .plan-features li::before { content: '✓'; color: var(--green); font-size: 13px; flex-shrink: 0; margin-top: 1px; }
+    .plan-card.featured .plan-features li { color: var(--text); }
+    .plan-card.featured .plan-price { color: var(--green); }
+    .plan-tag {
+      display: inline-block;
+      background: rgba(200,240,122,0.2); color: var(--green);
+      font-size: 11px; font-weight: 600; padding: 3px 10px;
+      border-radius: 100px; margin-bottom: 16px; letter-spacing: 0.5px;
+    }
+
+    /* ── CTA ── */
+    .cta-section {
+      padding: 100px 24px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-section::before {
+      content: '';
+      position: absolute; bottom: -100px; left: 50%; transform: translateX(-50%);
+      width: 600px; height: 600px;
+      background: radial-gradient(ellipse, rgba(200,240,122,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
     .cta-section h2 {
-      font-size: clamp(28px, 5vw, 44px);
-      font-weight: 300;
-      margin-bottom: 16px;
-      letter-spacing: -0.5px;
+      font-size: clamp(28px, 4vw, 48px);
+      font-weight: 300; letter-spacing: -0.5px;
+      margin-bottom: 16px; max-width: 600px; margin-inline: auto;
     }
-
     .cta-section p {
-      color: var(--muted);
-      font-size: 16px;
-      margin-bottom: 36px;
+      font-size: 16px; color: var(--muted); margin-bottom: 40px;
+      font-weight: 300;
     }
 
-    /* FOOTER */
+    /* ── FOOTER ── */
     footer {
       border-top: 1px solid var(--border);
-      padding: 32px 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: gap;
-      gap: 16px;
-      max-width: 1000px;
-      margin: 0 auto;
+      padding: 40px;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 20px;
     }
-
-    .footer-logo {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      text-decoration: none;
-    }
-
-    .footer-logo-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--accent);
-    }
-
-    .footer-logo-name {
-      font-size: 16px;
-      font-weight: 300;
-      color: var(--text);
-      letter-spacing: 1px;
-    }
-
-    .footer-links {
-      display: flex;
-      gap: 24px;
-      flex-wrap: wrap;
-    }
-
-    .footer-links a {
-      font-size: 13px;
-      color: var(--subtle);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-
+    .footer-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+    .footer-logo-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); }
+    .footer-logo-name { font-size: 15px; color: var(--muted); letter-spacing: 1px; }
+    .footer-links { display: flex; gap: 24px; }
+    .footer-links a { font-size: 13px; color: var(--subtle); text-decoration: none; transition: color 0.2s; }
     .footer-links a:hover { color: var(--muted); }
+    .footer-copy { font-size: 12px; color: var(--subtle); }
 
-    .footer-copy {
-      font-size: 12px;
-      color: var(--subtle);
-    }
-
-    /* DIVIDER */
+    /* ── DIVIDER ── */
     .divider {
-      height: 1px;
-      background: var(--border);
-      max-width: 1000px;
-      margin: 0 auto;
+      width: 100%; height: 1px; background: var(--border);
     }
 
-    @media (max-width: 600px) {
-      nav { padding: 14px 20px; }
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 16px 20px; }
+      .nav-links { display: none; }
       .hero { padding: 100px 20px 60px; }
-      footer { flex-direction: column; align-items: flex-start; }
+      .phone.secondary { display: none; }
+      .phone { width: 260px; }
+      .step:not(:last-child)::after { display: none; }
+      footer { flex-direction: column; align-items: flex-start; padding: 32px 20px; }
     }
   </style>
 </head>
@@ -465,49 +402,51 @@
 
   <!-- NAV -->
   <nav>
-    <a href="#" class="nav-logo">
+    <a class="nav-logo" href="#">
       <div class="nav-dot"></div>
       <span class="nav-name">Loci</span>
     </a>
-    <a href="#download" class="nav-cta">Download</a>
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#how">How it works</a>
+      <a href="#pricing">Pricing</a>
+    </div>
+    <a class="btn-primary" href="https://apps.apple.com/app/loci/id6745066364" target="_blank">
+      Download on iOS
+    </a>
   </nav>
 
   <!-- HERO -->
   <section class="hero">
     <div class="hero-badge">
-      <div class="hero-badge-dot"></div>
-      Coming to the App Store
+      <span class="hero-badge-dot"></span>
+      Now available on the App Store
     </div>
-    <h1>Your saves,<br><span>where they matter.</span></h1>
-    <p>Stop losing the things you find online. Loci surfaces your saved content the moment you arrive at the place you need it.</p>
-    <div class="hero-buttons">
-      <a href="#download" class="btn-primary">🍎 App Store — Coming Soon</a>
-      <a href="#how" class="btn-secondary">How it works</a>
+
+    <h1>Save links to <em>places,</em><br/>not folders.</h1>
+
+    <p class="hero-sub">
+      Loci surfaces your saved links when you arrive at the right place.
+      Save anything. Let location do the rest.
+    </p>
+
+    <div class="hero-actions">
+      <a class="btn-appstore" href="https://apps.apple.com/app/loci/id6745066364" target="_blank">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+        Download for iOS
+      </a>
+      <a class="btn-secondary" href="#features">See how it works →</a>
     </div>
-  </section>
 
-  <div class="divider"></div>
-
-  <!-- HOW IT WORKS -->
-  <section class="section" id="how">
-    <p class="section-label">How it works</p>
-    <h2>Three steps to smarter saves</h2>
-    <p class="section-sub">Loci connects your saved content to the real world, so the right thing appears at the right time.</p>
-    <div class="steps">
-      <div class="step">
-        <div class="step-num">1</div>
-        <h3>Save a link</h3>
-        <p>Save any link, video, recipe, or article. Loci auto-fetches the title so you don't have to type anything.</p>
+    <div class="hero-mockup">
+      <div class="phone secondary">
+        <img src="screenshots/zones.png" alt="Zones screen" onerror="this.parentElement.style.display='none'" />
       </div>
-      <div class="step">
-        <div class="step-num">2</div>
-        <h3>Pin it to a Zone</h3>
-        <p>Tag your save to a Zone — Kitchen, Gym, Coffee Shop, Airport. Anywhere that has meaning to you.</p>
+      <div class="phone">
+        <img src="screenshots/home.png" alt="Home screen" onerror="this.src='icon.png'; this.style.padding='40px'" />
       </div>
-      <div class="step">
-        <div class="step-num">3</div>
-        <h3>Arrive and discover</h3>
-        <p>When you enter a Zone, Loci surfaces everything you saved there. No searching, no forgetting.</p>
+      <div class="phone secondary">
+        <img src="screenshots/new-save.png" alt="New Save screen" onerror="this.parentElement.style.display='none'" />
       </div>
     </div>
   </section>
@@ -516,39 +455,96 @@
 
   <!-- FEATURES -->
   <section class="section" id="features">
-    <p class="section-label">Features</p>
-    <h2>Everything you need</h2>
-    <p class="section-sub">Built for people who save things with intention.</p>
-    <div class="features">
-      <div class="feature">
+    <div class="section-label">Features</div>
+    <h2 class="section-title">Everything you save,<br/>right where you need it.</h2>
+    <p class="section-sub">Stop hunting through bookmarks. Loci brings your saved links to the surface the moment you're in the right place.</p>
+
+    <div class="features-grid">
+      <div class="feature-card">
         <div class="feature-icon">📍</div>
-        <h3>Geo-surfacing</h3>
-        <p>Saves automatically appear when you enter the zone they're pinned to.</p>
+        <h3>Location-aware saves</h3>
+        <p>Attach a location to any link. When you enter that zone, Loci surfaces it automatically — no searching required.</p>
       </div>
-      <div class="feature">
-        <div class="feature-icon">🗂️</div>
-        <h3>Custom Zones</h3>
-        <p>Create zones for any place — home, work, travel destinations, anywhere.</p>
+      <div class="feature-card">
+        <div class="feature-icon">🗺️</div>
+        <h3>Custom zones</h3>
+        <p>Create named zones for the places that matter — Kitchen, Office, Gym, Guitar Corner. Group your saves by where they belong.</p>
       </div>
-      <div class="feature">
-        <div class="feature-icon">🎬</div>
-        <h3>Video thumbnails</h3>
-        <p>YouTube and Vimeo saves show rich thumbnails so you always know what's waiting.</p>
-      </div>
-      <div class="feature">
-        <div class="feature-icon">🌍</div>
-        <h3>9 languages</h3>
-        <p>Available in English, Hebrew, Spanish, French, German, Portuguese, Japanese, Arabic, and Chinese.</p>
-      </div>
-      <div class="feature">
+      <div class="feature-card">
         <div class="feature-icon">🔗</div>
-        <h3>Smart link preview</h3>
-        <p>Paste a URL and the title fills in automatically. Save in seconds.</p>
+        <h3>Save anything</h3>
+        <p>Articles, recipes, videos, products — Loci auto-detects the content type and organises it for you.</p>
       </div>
-      <div class="feature">
-        <div class="feature-icon">🍳</div>
-        <h3>Recipe extraction</h3>
-        <p>Turn cooking videos into structured recipes with ingredients and steps. Pro feature.</p>
+      <div class="feature-card">
+        <div class="feature-icon">📷</div>
+        <h3>Photo attachments</h3>
+        <p>Attach a photo to any save. Snap the menu, the shelf, the label — and find it exactly when you're back.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🌐</div>
+        <h3>9 languages</h3>
+        <p>Full RTL support. Loci speaks English, Hebrew, Spanish, French, German, Portuguese, Japanese, Arabic and Chinese.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <h3>Lightning fast</h3>
+        <p>Built natively for iOS. No web wrapper, no lag. Your saves open instantly from anywhere in the app.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <div class="how-section" id="how">
+    <div class="how-inner">
+      <div class="section-label">How it works</div>
+      <h2 class="section-title">Three steps. Then forget about it.</h2>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <h3>Save a link</h3>
+          <p>Paste any URL into Loci. Give it a title, add notes if you want, and pick which zone it belongs to.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <h3>Set a zone</h3>
+          <p>Create a zone for your current location — your kitchen, your favourite coffee shop, your guitar corner.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <h3>Arrive and open</h3>
+          <p>When you enter that zone, Loci notifies you. Tap to open your saves — right place, right time.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCREENSHOTS -->
+  <section class="screenshots-section" id="screenshots">
+    <div class="screenshots-header">
+      <div class="section-label">Screenshots</div>
+      <h2 class="section-title" style="margin-inline: auto; text-align: center;">See it in action</h2>
+    </div>
+    <div class="screenshots-scroll">
+      <div class="screenshot-card">
+        <img src="screenshots/home.png" alt="Home" onerror="this.style.display='none'" />
+        <div class="screenshot-label">Home — all your saves</div>
+      </div>
+      <div class="screenshot-card">
+        <img src="screenshots/zones.png" alt="Zones" onerror="this.style.display='none'" />
+        <div class="screenshot-label">Zones — organised by place</div>
+      </div>
+      <div class="screenshot-card">
+        <img src="screenshots/zone-detail.png" alt="Zone detail" onerror="this.style.display='none'" />
+        <div class="screenshot-label">Zone detail — set your radius</div>
+      </div>
+      <div class="screenshot-card">
+        <img src="screenshots/new-save.png" alt="New Save" onerror="this.style.display='none'" />
+        <div class="screenshot-label">New Save — quick and simple</div>
+      </div>
+      <div class="screenshot-card">
+        <img src="screenshots/profile.png" alt="Profile" onerror="this.style.display='none'" />
+        <div class="screenshot-label">Profile — your stats</div>
       </div>
     </div>
   </section>
@@ -556,45 +552,46 @@
   <div class="divider"></div>
 
   <!-- PRICING -->
-  <section class="section" id="pricing">
-    <p class="section-label">Pricing</p>
-    <h2>Simple, honest pricing</h2>
-    <p class="section-sub">Start for free. Upgrade when Loci becomes indispensable.</p>
-    <div class="pricing">
-      <div class="plan">
-        <p class="plan-name">Free</p>
-        <p class="plan-price">$0</p>
-        <p class="plan-period">forever</p>
+  <section class="pricing-section" id="pricing">
+    <div class="section-label">Pricing</div>
+    <h2 class="section-title">Start free. Go Pro when you're ready.</h2>
+    <p class="section-sub">Loci is free to use. Upgrade to Pro for unlimited zones, geo-surfacing and more.</p>
+
+    <div class="pricing-grid">
+      <div class="plan-card">
+        <div class="plan-name">Free</div>
+        <div class="plan-price">$0</div>
+        <p class="plan-desc">Everything you need to get started.</p>
         <ul class="plan-features">
-          <li>Save unlimited links</li>
-          <li>Create custom zones</li>
-          <li>Video thumbnails</li>
-          <li>Smart link preview</li>
+          <li>Unlimited saves</li>
+          <li>Up to 3 zones</li>
+          <li>Photo attachments</li>
           <li>9 languages</li>
         </ul>
       </div>
-      <div class="plan featured">
-        <div class="plan-badge">Most popular</div>
-        <p class="plan-name">Pro Yearly</p>
-        <p class="plan-price">$29.99<span>/yr</span></p>
-        <p class="plan-period">just $2.50 per month</p>
+
+      <div class="plan-card featured">
+        <div class="plan-tag">MOST POPULAR</div>
+        <div class="plan-name">Pro — Yearly</div>
+        <div class="plan-price" style="color: var(--green);">$29.99 <span>/ year</span></div>
+        <p class="plan-desc">Save 37% vs monthly. Best value.</p>
         <ul class="plan-features">
           <li>Everything in Free</li>
-          <li>Geo-surfacing notifications</li>
           <li>Unlimited zones</li>
-          <li>Recipe extraction</li>
-          <li>Priority sync & offline</li>
-          <li>Save history & insights</li>
+          <li>Geo-surfacing on arrival</li>
+          <li>Push notifications</li>
+          <li>Priority support</li>
         </ul>
       </div>
-      <div class="plan">
-        <p class="plan-name">Lifetime</p>
-        <p class="plan-price">$49.99</p>
-        <p class="plan-period">one time payment</p>
+
+      <div class="plan-card">
+        <div class="plan-name">Lifetime</div>
+        <div class="plan-price">$49.99 <span>once</span></div>
+        <p class="plan-desc">Pay once, own it forever. Founding member pricing.</p>
         <ul class="plan-features">
           <li>Everything in Pro</li>
-          <li>All future features</li>
-          <li>🔥 Founding member status</li>
+          <li>All future updates</li>
+          <li>Founding member badge</li>
         </ul>
       </div>
     </div>
@@ -603,27 +600,27 @@
   <div class="divider"></div>
 
   <!-- CTA -->
-  <section class="cta-section" id="download">
-    <h2>Ready to save smarter?</h2>
-    <p>Loci is coming to the App Store soon. Be the first to know.</p>
-    <a href="mailto:support@loci.app" class="btn-primary">✉️ Get notified at launch</a>
+  <section class="cta-section">
+    <h2>Your links, right where you need them.</h2>
+    <p>Download Loci free on the App Store.</p>
+    <a class="btn-appstore" href="https://apps.apple.com/app/loci/id6745066364" target="_blank">
+      <svg viewBox="0 0 24 24" fill="currentColor" style="width:20px;height:20px"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+      Download for iOS — Free
+    </a>
   </section>
-
-  <div class="divider"></div>
 
   <!-- FOOTER -->
   <footer>
-    <a href="#" class="footer-logo">
+    <a class="footer-logo" href="#">
       <div class="footer-logo-dot"></div>
       <span class="footer-logo-name">Loci</span>
     </a>
     <div class="footer-links">
-      <a href="#how">How it works</a>
-      <a href="#features">Features</a>
-      <a href="#pricing">Pricing</a>
-      <a href="mailto:support@loci.app">Contact</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="mailto:poratpeleg01@gmail.com">Support</a>
+      <a href="https://apps.apple.com/app/loci/id6745066364" target="_blank">App Store</a>
     </div>
-    <p class="footer-copy">© 2026 Loci. All rights reserved.</p>
+    <span class="footer-copy">© 2026 Loci. All rights reserved.</span>
   </footer>
 
 </body>
